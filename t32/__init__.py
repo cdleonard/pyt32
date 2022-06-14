@@ -16,7 +16,7 @@ def parse_t32_echo(val):
 
     Examples:
 
-    >>> parse_t32_echo(".123")
+    >>> parse_t32_echo("123.")
     123
     >>> parse_t32_echo("FALSE()")
     False
