@@ -139,7 +139,7 @@ class T32CtypesInterface(T32Interface):
 
     def __del__(self):
         if self._is_open:
-            logger.warn("closing t32 from destructor")
+            logger.warning("closing t32 from destructor")
             self.close()
 
     def attach(self):
