@@ -5,6 +5,8 @@ import time
 import ctypes
 
 import logging
+
+from t32 import T32NotFoundException
 logger = logging.getLogger(__name__)
 
 from .base import T32Interface
@@ -70,7 +72,7 @@ def get_t32api_libname():
     else:
         return "t32api64.so"
 
-class T32APINotFoundException(Exception):
+class T32APINotFoundException(T32NotFoundException):
     pass
 
 def get_t32api_libpath():
