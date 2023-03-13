@@ -96,10 +96,10 @@ class T32CtypesInterface(T32Interface):
     """Interface with Trace32 via t32api library using ctypes"""
 
     def __init__(self, node='127.0.0.1', port=20000):
+        self._is_open = False
         self.t32api = get_t32api_dll()
         self.node = node
         self.port = port
-        self._is_open = False
         self.open()
 
     def open(self):
