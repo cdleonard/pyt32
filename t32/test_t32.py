@@ -1,4 +1,9 @@
 import pytest
+from . import parse_t32_echo
+
+def test_parse_t32_echo():
+    assert parse_t32_echo("123.") == 123
+    assert parse_t32_echo("0x42") == 0x42
 
 def test_t32_echo_true(t32):
     assert t32.echo('True()') is True
