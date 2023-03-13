@@ -70,15 +70,24 @@ def get_t32api_libname():
     else:
         return "t32api64.so"
 
+class T32APINotFoundException(Exception):
+    pass
+
+def get_t32api_libpath():
+    """Get path to t32api libary as a string"""
+    from . import get_t32sys
+    t32sys = get_t32sys()
+    libname = get_t32api_libname()
+    for relpath in ['demo/api/capi/dll', 'demo/api/python']:
+        result = os.path.join(t32sys, relpath, libname)
+        if os.path.exists(result):
+            return result
+    raise T32APINotFoundException("Unable to find t32api library")
+
 def get_t32api_dll(libpath=None):
     """Load t32api libary as a ctypes.CDLL"""
-    if not libpath:
-        from . import get_t32sys
-        libpath = os.path.join(
-                get_t32sys(),
-                'demo/api/python',
-                get_t32api_libname())
-
+    if libpath is None:
+        libpath = get_t32api_libpath()
     return ctypes.CDLL(libpath)
 
 class T32CtypesInterface(T32Interface):
