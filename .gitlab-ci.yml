@@ -1,0 +1,6 @@
+test:
+  image: python
+  before_script:
+    - pip install pytest
+  script:
+    - pytest
