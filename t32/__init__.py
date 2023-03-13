@@ -5,10 +5,16 @@ from .t32remcmd import T32RemCmdInterface
 # Compat alias
 T32Rem = T32RemCmdInterface
 
+class T32NotFoundException(Exception):
+    pass
+
+class T32SYSNotFoundException(T32NotFoundException):
+    pass
+
 def get_t32sys(default=None):
     val = os.getenv('T32SYS', default)
     if val is None:
-        raise Exception('Missing T32SYS environment variable')
+        raise T32SYSNotFoundException('Missing T32SYS environment variable')
     return val
 
 def parse_t32_echo(val):
