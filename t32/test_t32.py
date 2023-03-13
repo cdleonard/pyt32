@@ -1,3 +1,5 @@
+import os
+import shutil
 import pytest
 from . import parse_t32_echo
 
@@ -20,22 +22,30 @@ def test_t32_echo_int_dec(t32):
 def test_t32_echo_int_hex(t32):
     assert t32.echo('0x123+0x456') == 0x579
 
+def create_t32rem():
+    if not shutil.which("t32rem"):
+        pytest.skip("Missing t32rem in PATH")
+    from .t32remcmd import T32RemCmdInterface
+    return T32RemCmdInterface()
+
+def create_t32api():
+    from . import T32NotFoundException
+    from .ctypes import T32CtypesInterface
+    try:
+        return T32CtypesInterface()
+    except T32NotFoundException as e:
+        pytest.skip(f"Skip T32API: {e}")
+
 @pytest.fixture
 def t32(request):
     if request.param == 'rem':
-        from .t32remcmd import T32RemCmdInterface
-        return T32RemCmdInterface()
+        return create_t32rem()
     elif request.param == 'dll':
-        from .ctypes import T32CtypesInterface
-        return T32CtypesInterface()
+        return create_t32api()
     else:
         raise Exception()
 
 def pytest_generate_tests(metafunc):
     if 't32' in metafunc.fixturenames:
-        vals = []
-        if metafunc.config.getoption('test_t32rem_interface', False):
-            vals.append('rem')
-        if metafunc.config.getoption('test_t32dll_interface', False):
-            vals.append('dll')
+        vals = ["rem", "dll"]
         metafunc.parametrize("t32", vals, indirect=True, scope='module')
